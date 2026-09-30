@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<!-- ⚙️ TUNABLE: Bahasa halaman (id/en) -->
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ⚙️ TUNABLE: Judul tab browser -->
+  <title>TOPOQUEST — Game Topologi Jaringan | SMPN 19 Bekasi</title>
+  <meta name="description" content="Game LKPD interaktif Topologi Jaringan untuk kelas 9 SMP Negeri 19 Kota Bekasi" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ================= HEADER ================= -->
+  <header class="app-header" role="banner">
+    <div class="header-left">
+      <!-- ⚙️ TUNABLE: ganti logo.png dengan logo asli -->
+      <img src="logo.png" alt="Logo SMPN 19 Bekasi" class="app-logo"
+           onerror="this.style.display='none';document.getElementById('logoFallback').style.display='inline-block';" />
+      <span id="logoFallback" class="logo-fallback">SMPN 19 Bekasi</span>
+    </div>
+    <h1 class="app-title" id="appTitle">TOPOQUEST</h1>
+    <div class="header-right">
+      <span class="score-chip" title="Skor Total">🏆 <span id="scoreDisplay">0</span></span>
+      <button class="icon-btn" id="langBtn" aria-label="Ganti Bahasa" title="Ganti Bahasa">🇮🇩 ID</button>
+      <button class="icon-btn" id="darkBtn" aria-label="Mode Gelap" title="Mode Gelap">🌙</button>
+    </div>
+  </header>
+
+  <!-- ================= PROGRESS BAR ================= -->
+  <div class="progress-wrap" id="progressWrap" hidden>
+    <div class="progress-label">
+      <span id="progressText">Level 1 dari 5</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- ================= MAIN ================= -->
+  <main class="app-main" role="main">
+
+    <!-- ======== HOME SCREEN ======== -->
+    <section class="screen active" id="screen-home">
+      <div class="hero-card">
+        <div class="hero-illustration" aria-hidden="true">
+          <svg viewBox="0 0 200 160" width="180" height="144">
+            <line x1="100" y1="80" x2="40" y2="40" stroke="#2E75B6" stroke-width="3"/>
+            <line x1="100" y1="80" x2="160" y2="40" stroke="#2E75B6" stroke-width="3"/>
+            <line x1="100" y1="80" x2="40" y2="120" stroke="#2E75B6" stroke-width="3"/>
+            <line x1="100" y1="80" x2="160" y2="120" stroke="#2E75B6" stroke-width="3"/>
+            <circle cx="100" cy="80" r="16" fill="#1F4E79"/>
+            <circle cx="40" cy="40" r="12" fill="#C55A11"/>
+            <circle cx="160" cy="40" r="12" fill="#C55A11"/>
+            <circle cx="40" cy="120" r="12" fill="#C55A11"/>
+            <circle cx="160" cy="120" r="12" fill="#C55A11"/>
+            <text x="100" y="85" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">SW</text>
+          </svg>
+        </div>
+        <h2 class="hero-title">Petualangan Topologi Jaringan</h2>
+        <p class="hero-sub">Lembar Kerja Peserta Didik (LKPD) Interaktif — Kelas 9</p>
+        <p class="hero-desc">
+          Uji pemahamanmu tentang 6 topologi jaringan: <b>Bus, Star, Ring, Mesh, Tree, Hybrid</b>.
+          Selesaikan 5 misi, kumpulkan poin, dan raih badge <b>Master Jaringan</b>! 🚀
+        </p>
+
+        <div class="hero-form">
+          <label for="playerName">Nama Pemain (Player Name):</label>
+          <input type="text" id="playerName" placeholder="Tulis namamu di sini..." maxlength="30" autocomplete="off" />
+        </div>
+
+        <button class="btn btn-primary btn-lg" id="startBtn">▶ MULAI MISI (Start Mission)</button>
+
+        <div class="hero-links">
+          <button class="btn btn-ghost" id="howToBtn">ℹ Cara Bermain</button>
+          <button class="btn btn-ghost" id="leaderboardBtn">🏆 Papan Skor</button>
+        </div>
+      </div>
+
+      <!-- Glosarium singkat di home -->
+      <div class="glossary-card">
+        <h3>📖 Glosarium Kilat (Quick Glossary)</h3>
+        <div class="glossary-grid">
+          <div class="gloss-item"><b>Node</b> (Perangkat)</div>
+          <div class="gloss-item"><b>Link</b> (Jalur)</div>
+          <div class="gloss-item"><b>Switch</b> (Colokan Pusat)</div>
+          <div class="gloss-item"><b>Router</b> (Pintu Internet)</div>
+          <div class="gloss-item"><b>Access Point</b> (Pemancar WiFi)</div>
+          <div class="gloss-item"><b>Bandwidth</b> (Lebar Jalur Data)</div>
+          <div class="gloss-item"><b>Latency</b> (Waktu Tempuh)</div>
+          <div class="gloss-item"><b>Redundancy</b> (Cadangan Jalur)</div>
+          <div class="gloss-item"><b>Trade-off</b> (Kompromi)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== MISSION MAP ======== -->
+    <section class="screen" id="screen-map">
+      <h2 class="section-title">🗺️ Peta Misi (Mission Map)</h2>
+      <p class="section-sub">Selesaikan tiap misi untuk membuka misi berikutnya!</p>
+      <div class="mission-grid" id="missionGrid">
+        <!-- Kartu misi akan dibuat oleh JS -->
+      </div>
+    </section>
+
+    <!-- ======== LEVEL 1 ======== -->
+    <section class="screen" id="screen-level1">
+      <div class="level-header">
+        <h2>🟦 Level 1 — KENALI TOPOLOGI</h2>
+        <p class="level-sub">Tarik (drag) kartu deskripsi ke gambar topologi yang cocok.</p>
+      </div>
+      <div class="match-layout">
+        <div class="match-col">
+          <h3 class="col-title">📋 Kartu Deskripsi</h3>
+          <div id="descColumn" class="desc-column"></div>
+        </div>
+        <div class="match-col">
+          <h3 class="col-title">🖼️ Gambar Topologi</h3>
+          <div id="topoColumn" class="topo-column"></div>
+        </div>
+      </div>
+      <div class="level-footer">
+        <button class="btn btn-ghost" id="l1Hint">💡 Bantuan</button>
+        <button class="btn btn-primary" id="l1Next" disabled>Lanjut ke Level 2 →</button>
+      </div>
+    </section>
+
+    <!-- ======== LEVEL 2 ======== -->
+    <section class="screen" id="screen-level2">
+      <div class="level-header">
+        <h2>🟩 Level 2 — BANGUN JARINGAN</h2>
+        <p class="level-sub" id="l2Challenge">Bangun topologi STAR dengan 4 PC + 1 Switch</p>
+      </div>
+      <div class="build-layout">
+        <div class="toolbox">
+          <h3 class="col-title">🧰 Komponen</h3>
+          <div class="tool-item" draggable="true" data-type="pc">💻 PC</div>
+          <div class="tool-item" draggable="true" data-type="switch">🔀 Switch</div>
+          <div class="tool-item" draggable="true" data-type="router">📡 Router</div>
+          <div class="tool-item" draggable="true" data-type="ap">📶 Access Point</div>
+        </div>
+        <div class="canvas-area">
+          <h3 class="col-title">🎨 Kanvas Jaringan</h3>
+          <div class="build-canvas" id="buildCanvas"></div>
+        </div>
+      </div>
+      <div class="level-footer">
+        <button class="btn btn-ghost" id="l2Hint">💡 Bantuan</button>
+        <button class="btn btn-ghost" id="l2Reset">🔄 Reset Kanvas</button>
+        <button class="btn btn-primary" id="l2Check">✅ Periksa</button>
+        <button class="btn btn-primary" id="l2Next" hidden>Lanjut ke Level 3 →</button>
+      </div>
+    </section>
+
+    <!-- ======== LEVEL 3 ======== -->
+    <section class="screen" id="screen-level3">
+      <div class="level-header">
+        <h2>🟨 Level 3 — PILIH YANG TEPAT</h2>
+        <p class="level-sub">Pilih topologi yang paling sesuai dengan skenario nyata.</p>
+      </div>
+      <div class="quiz-wrap">
+        <div class="quiz-card">
+          <div class="quiz-counter">Skenario <span id="l3Counter">1</span> / 5</div>
+          <div class="quiz-scenario" id="l3Scenario"></div>
+          <div class="quiz-options" id="l3Options"></div>
+          <div class="quiz-explanation" id="l3Explain" hidden></div>
+        </div>
+      </div>
+      <div class="level-footer">
+        <button class="btn btn-ghost" id="l3Hint">💡 Bantuan</button>
+        <button class="btn btn-primary" id="l3Next" hidden>Lanjut →</button>
+      </div>
+    </section>
+
+    <!-- ======== LEVEL 4 ======== -->
+    <section class="screen" id="screen-level4">
+      <div class="level-header">
+        <h2>🟧 Level 4 — UJI TRADE-OFF</h2>
+        <p class="level-sub">Atur 3 slider di bawah. Sistem akan memilih topologi terbaik berdasarkan pilihanmu!</p>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-block">
+          <label for="sliderCost">💰 Biaya (Cost): <span id="valCost">50</span></label>
+          <input type="range" id="sliderCost" min="0" max="100" value="50" />
+          <div class="slider-hint"><span>Murah</span><span>Mahal</span></div>
+        </div>
+        <div class="slider-block">
+          <label for="sliderReliability">🛡️ Keandalan (Reliability): <span id="valReliability">50</span></label>
+          <input type="range" id="sliderReliability" min="0" max="100" value="50" />
+          <div class="slider-hint"><span>Rendah</span><span>Tinggi</span></div>
+        </div>
+        <div class="slider-block">
+          <label for="sliderSpeed">⚡ Kecepatan (Speed): <span id="valSpeed">50</span></label>
+          <input type="range" id="sliderSpeed" min="0" max="100" value="50" />
+          <div class="slider-hint"><span>Lambat</span><span>Cepat</span></div>
+        </div>
+        <div class="slider-result" id="l4Result">
+          <p>Atur slider di atas untuk melihat rekomendasi topologi! 🎯</p>
+        </div>
+        <div class="slider-actions">
+          <button class="btn btn-ghost" id="l4Hint">💡 Bantuan</button>
+          <button class="btn btn-primary" id="l4Apply">🎯 Terapkan Pilihan</button>
+          <button class="btn btn-primary" id="l4Next" hidden>Lanjut ke Level 5 →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== LEVEL 5 ======== -->
+    <section class="screen" id="screen-level5">
+      <div class="level-header">
+        <h2>🟪 Level 5 — REFLEKSI AKHIR</h2>
+        <p class="level-sub">Isi exit ticket berikut dengan jujur. Ini bagian penting dari belajar! 🌟</p>
+      </div>
+      <div class="reflect-wrap">
+        <div class="reflect-item">
+          <label for="l5q1">1. Hari ini saya belajar bahwa...</label>
+          <textarea id="l5q1" rows="3" placeholder="Tulis jawabanmu di sini..."></textarea>
+        </div>
+        <div class="reflect-item">
+          <label for="l5q2">2. Bagian tersulit adalah...</label>
+          <textarea id="l5q2" rows="3" placeholder="Tulis jawabanmu di sini..."></textarea>
+        </div>
+        <div class="reflect-item">
+          <label for="l5q3">3. Saya ingin tahu lebih dalam tentang...</label>
+          <textarea id="l5q3" rows="3" placeholder="Tulis jawabanmu di sini..."></textarea>
+        </div>
+        <div class="reflect-item">
+          <label>4. Nilai saya hari ini (1–4):</label>
+          <div class="star-rating" id="starRating" role="radiogroup" aria-label="Rating diri 1-4">
+            <button class="star" data-value="1" aria-label="1 bintang">⭐</button>
+            <button class="star" data-value="2" aria-label="2 bintang">⭐</button>
+            <button class="star" data-value="3" aria-label="3 bintang">⭐</button>
+            <button class="star" data-value="4" aria-label="4 bintang">⭐</button>
+          </div>
+        </div>
+      </div>
+      <div class="level-footer">
+        <button class="btn btn-ghost" id="l5Hint">💡 Bantuan</button>
+        <button class="btn btn-primary btn-lg" id="l5Finish">🎉 Kirim & Lihat Skor Akhir</button>
+      </div>
+    </section>
+
+    <!-- ======== FINAL / CERTIFICATE ======== -->
+    <section class="screen" id="screen-final">
+      <div class="final-card">
+        <h2 class="final-title">🎉 Selamat, <span id="finalName">Pemain</span>!</h2>
+        <p class="final-sub">Kamu telah menyelesaikan seluruh misi TOPOQUEST!</p>
+
+        <div class="final-score-box">
+          <div class="final-score-label">Skor Akhir (Final Score)</div>
+          <div class="final-score-value" id="finalScore">0</div>
+          <div class="final-badge" id="finalBadge">🌱 Pemula Jaringan</div>
+        </div>
+
+        <div class="final-actions">
+          <button class="btn btn-primary" id="downloadAnswersBtn">📥 Unduh Jawaban (.txt)</button>
+          <button class="btn btn-primary" id="certificateBtn">📜 Buat Sertifikat (PNG)</button>
+          <button class="btn btn-ghost" id="playAgainBtn">🔄 Main Lagi</button>
+        </div>
+
+        <canvas id="certCanvas" width="900" height="600" hidden></canvas>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="app-footer" role="contentinfo">
+    <!-- ⚙️ TUNABLE: teks footer -->
+    LKPD Informatika Kelas 9 · Topologi Jaringan · © 2026 SMP Negeri 19 Kota Bekasi
+  </footer>
+
+  <!-- ================= TOAST ================= -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- ================= MODAL ================= -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-box">
+      <h3 class="modal-title" id="modalTitle">Info</h3>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="modalOkBtn">OK</button>
+        <button class="btn btn-ghost" id="modalCancelBtn" hidden>Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
